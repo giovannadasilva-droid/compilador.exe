@@ -1,0 +1,184 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project RG-001 — Protocolo de Sobrevivência</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="glitch"></div>
+
+
+  <header>
+    <div class="brand">
+      <div class="logo">☣</div>
+      <div>
+        <h1>PROJECT RG-001</h1>
+        <small>Protocolo de sobrevivência · instalação subterrânea</small>
+      </div>
+    </div>
+    <div class="top-status">
+      <span class="pill">STATUS <strong id="headerStatus">CONTENÇÃO FALHOU</strong></span>
+      <span class="pill">⏱ <strong id="headerTime">00:00</strong></span>
+      <span class="pill">TURNO <strong id="headerTurn">0</strong></span>
+    </div>
+  </header>
+
+
+  <main>
+    <section id="startScreen" class="screen active">
+      <div class="hero">
+        <div>
+          <div class="kicker">⚠ Arquivo confidencial · nível de acesso 5</div>
+          <h2>O protocolo falhou.<br><span style="color:var(--red2)">Sobreviva à verdade.</span></h2>
+          <p class="lead">Um experimento saiu do controle. Cinco andares foram selados. A infecção está evoluindo — e cada decisão custa tempo, energia ou uma vida.</p>
+          <div class="warning">“Tempo e escolha são vidas.” — Registro recuperado do servidor central</div>
+          <div class="footer-actions">
+            <button class="primary" onclick="showScreen('selectScreen')">▶ INICIAR PROTOCOLO</button>
+            <button onclick="showScreen('rulesScreen')">☷ REGRAS DO JOGO</button>
+          </div>
+          <p style="color:var(--muted);font-size:12px;margin-top:15px">Jogo de tabuleiro digital · solo · escolhas por turnos · efeitos sonoros opcionais.</p>
+        </div>
+        <div class="hero-art">
+          <div class="biohazard">☣</div>
+          <div class="art-label">RG-001 / BIOHAZARD CONTAINMENT FACILITY<br>ACESSO EXTERNO: NEGADO · SINAL: INSTÁVEL</div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="selectScreen" class="screen">
+      <div class="section-head">
+        <div><div class="kicker">Seleção de personagem</div><h2>Escolha sua rota</h2></div>
+        <span class="pill">4 PERSONAGENS DISPONÍVEIS</span>
+      </div>
+      <div class="character-grid" id="characterGrid"></div>
+      <div class="footer-actions">
+        <button onclick="showScreen('startScreen')">← Voltar</button>
+        <button class="primary" onclick="startGame()">INICIAR MISSÃO →</button>
+        <button onclick="showScreen('rulesScreen')">Consultar regras</button>
+      </div>
+    </section>
+
+
+    <section id="rulesScreen" class="screen">
+      <div class="section-head">
+        <div><div class="kicker">Manual de campo</div><h2>Regras de sobrevivência</h2></div>
+        <button onclick="showScreen('startScreen')">← Voltar</button>
+      </div>
+      <div class="rules-grid">
+        <div class="rule"><h3>🎲 Turnos e ações</h3><p>Cada turno oferece 2 ações. Explorar, procurar itens, lutar, reparar sistemas e usar recursos consome ações e tempo. O relógio avança a cada ação.</p></div>
+        <div class="rule"><h3>🧬 Infecção e sanidade</h3><p>Will começa infectado. A infecção aumenta com o tempo e com encontros perigosos. Visão, tremores e interferências pioram nos estágios intermediário e crítico.</p></div>
+        <div class="rule"><h3>🎒 Inventário</h3><p>Limite de 10 espaços. Comida recupera energia; bandagens recuperam energia e sanidade. Escolha cuidadosamente o que carregar.</p></div>
+        <div class="rule"><h3>🧪 Antídoto</h3><p>Hérika é a única que pode preparar o antídoto. Antes de 20 min, fórmula e reagentes básicos; depois de 20 min, fórmula melhorada; após 40 min, também sangue O+. Após 3 horas, a cura não pode mais ser preparada.</p></div>
+        <div class="rule"><h3>💻 Sistemas</h3><p>Will pode restaurar computadores, segurança e comunicações. Sistemas restaurados revelam pistas, liberam portas e podem reduzir o risco de exploração.</p></div>
+        <div class="rule"><h3>🧟 Ameaças</h3><p>Combate gasta energia e munição. Damon é melhor em combate; Jade é ágil; Hérika é especialista científica; Will depende de tecnologia e furtividade.</p></div>
+        <div class="rule"><h3>🗺️ Cinco andares</h3><p>1: Entrada e recepção · 2: Segurança e arquivos · 3: Pesquisa e escritório · 4: Necrotério e armazenamento · 5: Testes e experimentos.</p></div>
+        <div class="rule"><h3>🏁 Finais</h3><p>Escape, cura ou derrota dependem do tempo, das evidências, dos sistemas restaurados e da condição do personagem. Sobreviver não significa descobrir toda a verdade.</p></div>
+      </div>
+      <div class="footer-actions"><button class="primary" onclick="showScreen('selectScreen')">ESCOLHER PERSONAGEM</button></div>
+    </section>
+
+
+    <section id="gameScreen" class="screen">
+      <div class="section-head">
+        <div>
+          <div class="kicker">Instalação RG-001 · modo de sobrevivência</div>
+          <h2 id="missionTitle" style="font-size:29px">Missão ativa</h2>
+        </div>
+        <div class="footer-actions" style="margin:0">
+          <button class="small" onclick="showRulesModal()">☷ Regras</button>
+          <button class="small" onclick="saveGame()">💾 Guardar</button>
+          <button class="small" onclick="confirmRestart()">↻ Reiniciar</button>
+        </div>
+      </div>
+
+
+      <div class="stats" id="stats"></div>
+
+
+      <div class="game-layout">
+        <div class="side-stack">
+          <div class="panel">
+            <div class="panel-head"><h3>🗺️ Mapa da instalação</h3><span id="floorLabel" class="pill">5 ANDARES</span></div>
+            <div class="panel-body">
+              <div id="mapGrid" class="map-grid"></div>
+              <p style="color:var(--muted);font-size:11px;margin:12px 0 0">Selecione um setor conhecido para se deslocar. Áreas restritas exigem cartão, código ou segurança restaurada.</p>
+            </div>
+          </div>
+
+
+          <div class="panel">
+            <div class="panel-head"><h3>⚙️ Ações disponíveis</h3><span class="pill">AÇÕES <strong id="actionsLeft">2</strong>/2</span></div>
+            <div class="panel-body">
+              <div class="actions" id="actionsGrid"></div>
+              <div class="footer-actions">
+                <button class="gold" onclick="endTurn()">⏭ Encerrar turno</button>
+                <button onclick="useRest()">☕ Respirar / descansar</button>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="panel">
+            <div class="panel-head"><h3>🎒 Inventário</h3><span class="pill"><strong id="inventoryCount">0</strong>/10 espaços</span></div>
+            <div class="panel-body">
+              <div id="inventory" class="inventory"></div>
+              <div id="itemControls" class="footer-actions"></div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="side-stack">
+          <div class="panel">
+            <div class="panel-head"><h3>🎯 Objetivos da missão</h3><span id="objectiveCount" class="pill">0/0</span></div>
+            <div class="panel-body" id="objectives"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>📟 Terminal de eventos</h3><span class="pill">LIVE FEED</span></div>
+            <div class="panel-body"><div class="log" id="log"></div></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>🧬 Diagnóstico / sistema</h3></div>
+            <div class="panel-body" id="diagnostic"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="endScreen" class="screen">
+      <div class="end-screen">
+        <div class="big" id="endIcon">☣</div>
+        <div class="kicker" id="endKicker">RELATÓRIO FINAL</div>
+        <h2 id="endTitle">Protocolo encerrado</h2>
+        <p id="endText" class="lead" style="margin:0 auto"></p>
+        <div id="endReport" class="storybox" style="max-width:650px;margin:25px auto;text-align:left"></div>
+        <div class="footer-actions" style="justify-content:center">
+          <button class="primary" onclick="showScreen('selectScreen')">NOVA PARTIDA</button>
+          <button onclick="showScreen('startScreen')">TELA INICIAL</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <div class="overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="kicker" id="modalKicker">EVENTO</div>
+      <h2 id="modalTitle">Título</h2>
+      <p id="modalText"></p>
+      <div id="modalExtra"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+
+
+  <div id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
